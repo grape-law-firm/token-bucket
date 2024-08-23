@@ -1,24 +1,19 @@
-# Token Bucket
-This project implements a *Token Bucket algorithm for rate-limiting. The token bucket is a simple mechanism to control how many actions (e.g., API requests) can be performed over a given time window. The bucket accumulates tokens at a steady rate which you can fine-tune and stop it for a duration, and each action consumes a token. If no tokens are available, the action can either fail or wait for tokens to refill.
+# Simple Token Bucket
+This package provides a simple and efficient implementation of the token bucket algorithm for rate limiting. It helps you control the frequency of actions (such as API requests) within a specified time frame.
+
+The token bucket algorithm provides a simple mechanism to control how many actions (e.g., API requests) can be performed over a given time window. The bucket accumulates tokens at a steady rate which you can fine-tune and stop it for a duration, and each action consumes a token. If no tokens are available, the action can either fail or wait for tokens to refill.
 
 ## Features
-- Asynchronous Consumption: Supports waiting for tokens asynchronously when they are unavailable.
-- Customizable Refill Rates: Allows fine-tuning of bucket capacity, refill rate, and time windows.
-- Force Stop and Refill: Can force a bucket to wait and stop refilling for a specified duration.
-- Verbose Mode: Logs the state of the token bucket for debugging purposes.
-
+- **Asynchronous Consumption:** Supports waiting for tokens asynchronously when they are unavailable.
+- **Customizable Refill Rates:** Allows fine-tuning of bucket capacity, refill rate, and time windows.
+- **Force Stop and Refill:** Can force a bucket to wait and stop refilling for a specified duration.
+- **Verbose Mode:** Logs the state of the token bucket for debugging purposes.
 
 ## Getting Started
 
-### Prerequisites
-- Node.js: Ensure that you have Node.js installed on your machine.
-- TypeScript: This project uses TypeScript for type safety. You should have tsc installed, or use the provided compiled JavaScript if applicable.
+### Simple Usage
 
-## Usage
-
-### Get Started
-
-```
+```ts
 import { TokenBucket } from 'token-bucket';
 
 const tokenBucket = new TokenBucket({
@@ -27,14 +22,13 @@ const tokenBucket = new TokenBucket({
   windowInMs: 1000,
 });
 
-if (tokenBucket.consume()) {
+if (await tokenBucket.consumeAsync()) {
   // Your logic when a token is consumed successfully
 }
 ```
-```
-### Usage with Verbose Logging
 
-typescript
+### Usage with Verbose Logging
+```ts
 import { TokenBucket } from 'token-bucket';
 
 const tokenBucket = new TokenBucket({
@@ -43,20 +37,15 @@ const tokenBucket = new TokenBucket({
   windowInMs: 2000,
 }, true);
 
-async function makeRequest() {
-  if (await tokenBucket.consumeAsync()) {
-    // Your async logic when a token is consumed successfully
-  } else {
-    console.log("Rate limit exceeded. Waiting for tokens...");
-  }
+if (await tokenBucket.consumeAsync()) {
+  // Your async logic when a token is consumed successfully
+} else
+  console.log("Rate limit exceeded. Waiting for tokens...");
 }
-
-makeRequest();
 ```
-```
-### Wait for enough Tokens to be in a Tokenbucket
 
-typescript
+### Wait for Bucket to Have Enough Tokens
+```ts
 import { TokenBucket } from 'token-bucket';
 
 const tokenBucket = new TokenBucket({
@@ -74,11 +63,12 @@ while (!await tokenBucket.consumeAsync(numberOfTokensToBeConsumed));
 
 ### TokenBucketOptions
 
-- capacity: The maximum number of tokens in the bucket.
-- fillPerWindow: The number of tokens added to the bucket per window.
-- windowInMs: The size of the window in milliseconds.
-- initialTokens: The initial number of tokens in the bucket. Defaults to the capacity if not provided.
-```
+- `capacity`: The maximum number of tokens in the bucket.
+- `fillPerWindow`: The number of tokens added to the bucket per window.
+- `windowInMs`: The size of the window in milliseconds.
+- `initialTokens`: The initial number of tokens in the bucket. Defaults to the capacity if not provided.
+
+```ts
 import { TokenBucket } from 'token-bucket';
 
 const tokenBucket = new TokenBucket({
@@ -91,25 +81,32 @@ const tokenBucket = new TokenBucket({
 
 ## Methods
 
-### consume(amount: number = 1): boolean
+```ts
+consume(amount: number = 1): boolean
+```
 
 Consumes the specified number of tokens from the bucket. Returns true if the tokens were successfully consumed, otherwise false.
 
-### consumeAsync(amount: number = 1): Promise<boolean>
+```ts
+consumeAsync(amount: number = 1): Promise<boolean>
+```
 
 Asynchronously consumes the specified number of tokens from the bucket. Returns a promise that resolves to true if the tokens were successfully consumed, otherwise false.
 
-### start(): TokenBucket
+```ts
+start(): TokenBucket
+```
 
 Starts the internal timer for refilling tokens. Returns the TokenBucket instance to allow chaining.
 
-### stop(): void
+```ts
+stop(): void
+```
 
 Stops the internal timer for refilling tokens.
 
-### forceWaitUntilMilisecondsPassed(delayInMs: number): void
+```ts
+forceWaitUntilMilisecondsPassed(delayInMs: number): void
+```
 
-Forces the bucket to wait until the specified amount of milliseconds have passed before refilling.
-The intented use of this method is the when the an AsyncCaller object which is explained below receives an 429 Too Many Requests error. 
-The related methods of the AsyncCaller class are implemented accordingly. We advice not to use this method anywhere else
-unless it is absolutely necessary.
+Forces the bucket to wait until the specified amount of milliseconds have passed before refilling. The intended use of this method is aligning with the rate limit of the API in case your TokenBucket is providing more tokens than it should (i.e: if you are using shared rate limit within different places).
