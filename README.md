@@ -1,4 +1,4 @@
-# token-bucket
+# Token Bucket
 This project implements a *Token Bucket algorithm for rate-limiting. The token bucket is a simple mechanism to control how many actions (e.g., API requests) can be performed over a given time window. The bucket accumulates tokens at a steady rate which you can fine-tune and stop it for a duration, and each action consumes a token. If no tokens are available, the action can either fail or wait for tokens to refill.
 
 ## Features
@@ -18,7 +18,7 @@ This project implements a *Token Bucket algorithm for rate-limiting. The token b
 
 ### Get Started
 
-typescript
+```
 import { TokenBucket } from 'token-bucket';
 
 const tokenBucket = new TokenBucket({
@@ -30,7 +30,8 @@ const tokenBucket = new TokenBucket({
 if (tokenBucket.consume()) {
   // Your logic when a token is consumed successfully
 }
-
+```
+```
 ### Usage with Verbose Logging
 
 typescript
@@ -51,7 +52,8 @@ async function makeRequest() {
 }
 
 makeRequest();
-
+```
+```
 ### Wait for enough Tokens to be in a Tokenbucket
 
 typescript
@@ -66,7 +68,7 @@ const tokenBucket = new TokenBucket({
 // This while loop waits for tokenBucket to asynchronously consumes the specified number of tokens, 5 in this case.
 let numberOfTokensToBeConsumed = 5;
 while (!await tokenBucket.consumeAsync(numberOfTokensToBeConsumed));
-
+```
 
 ## Configuration Options
 
@@ -76,13 +78,7 @@ while (!await tokenBucket.consumeAsync(numberOfTokensToBeConsumed));
 - fillPerWindow: The number of tokens added to the bucket per window.
 - windowInMs: The size of the window in milliseconds.
 - initialTokens: The initial number of tokens in the bucket. Defaults to the capacity if not provided.
-typescript
-/*
-capacity is set to 20, so bucket can hold maximum 20 tokens in a given moment.
-fillPerWindow is set to 2, so at each window 2 tokens will be put into the bucket.
-windowInMs is set to 1500.
-initialTokens is set to 40, so initial number of tokens in the bucket is no longer defaul value (i.e. capacity which is set to 20).
-*/
+```
 import { TokenBucket } from 'token-bucket';
 
 const tokenBucket = new TokenBucket({
@@ -91,7 +87,7 @@ const tokenBucket = new TokenBucket({
   windowInMs: 1500,
   initialTokens: 40,
 });
-
+```
 
 ## Methods
 
