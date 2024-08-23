@@ -21,10 +21,20 @@ const tokenBucket = new TokenBucket({
   fillPerWindow: 1,
   windowInMs: 1000,
 });
-
-if (await tokenBucket.consumeAsync()) {
-  // Your logic when a token is consumed successfully
+// Simple Usage: Returns true only when a token is available right away
+if (tokenBucket.consume()) {
+  // Your logic IF the required tokens are available right away.
 }
+
+// Async Usage: Wait until a token is available
+if (await tokenBucket.consumeAsync()) {
+  // Your logic WHEN required tokens are consumed successfully
+}
+
+// Async Usage 2: Wait until a token is available
+while (!await tokenBucket.consumeAsync()); // Don't forget to add a semicolon after the while loop
+// Your logic here, which will run AFTER the token is available and consumed. 
+
 ```
 
 ### Usage with Verbose Logging
@@ -39,24 +49,24 @@ const tokenBucket = new TokenBucket({
 
 if (await tokenBucket.consumeAsync()) {
   // Your async logic when a token is consumed successfully
-} else
-  console.log("Rate limit exceeded. Waiting for tokens...");
 }
+// Logs the following
+// * When there are not enough tokens, it will log a message, which also tells when will the tokens be available
+// * Every 10 seconds, the remaining tokens
+// * Forced Stop started-ended
 ```
 
-### Wait for Bucket to Have Enough Tokens
+### Singleton Recommendation
 ```ts
 import { TokenBucket } from 'token-bucket';
 
-const tokenBucket = new TokenBucket({
+export const tokenBucket = new TokenBucket({
   capacity: 20,
   fillPerWindow: 5,
   windowInMs: 2000,
 }, true);
 
-// This while loop waits for tokenBucket to asynchronously consumes the specified number of tokens, 5 in this case.
-let numberOfTokensToBeConsumed = 5;
-while (!await tokenBucket.consumeAsync(numberOfTokensToBeConsumed));
+// For utilizing the same api / resource, using a single instance of tokenBucket is recommended throughout the application is recommended.
 ```
 
 ## Configuration Options
@@ -110,3 +120,6 @@ forceWaitUntilMilisecondsPassed(delayInMs: number): void
 ```
 
 Forces the bucket to wait until the specified amount of milliseconds have passed before refilling. The intended use of this method is aligning with the rate limit of the API in case your TokenBucket is providing more tokens than it should (i.e: if you are using shared rate limit within different places).
+
+## Authors
+[mnkasikci](https://github.com/mnkasikci)
