@@ -1,0 +1,26 @@
+{
+  "name": "@grape-law-firm/token-bucket",
+  "version": "1.0.0",
+  "keywords": [],
+  "main": "lib/index.js",
+  "module": "lib/index.mjs",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "engines": {
+    "node": "20.x"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsup"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.2",
+    "tsup": "^8.0.2",
+    "typescript": "^5.2.2"
+  },
+  "publishConfig": {
+    "@grape-law-firm:registry": "https://npm.pkg.github.com"
+  }
+}
