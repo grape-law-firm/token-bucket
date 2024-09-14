@@ -1,5 +1,5 @@
 {
-  "name": "@grape-law-firm/token-bucket",
+  "name": "@glf/token-bucket",
   "version": "1.0.0",
   "keywords": [],
   "main": "lib/index.js",
