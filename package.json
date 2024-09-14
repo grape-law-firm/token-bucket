@@ -1,5 +1,5 @@
 {
-  "name": "@glf/token-bucket",
+  "name": "@grapelaw/token-bucket",
   "version": "1.0.0",
   "keywords": [],
   "main": "lib/index.js",
