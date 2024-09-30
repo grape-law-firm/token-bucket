@@ -1,4 +1,4 @@
-# Simple Token Bucket
+# Token Bucket
 This package provides a simple and efficient implementation of the token bucket algorithm for rate limiting. It helps you control the frequency of actions (such as API requests) within a specified time frame.
 
 The token bucket algorithm provides a simple mechanism to control how many actions (e.g., API requests) can be performed over a given time window. The bucket accumulates tokens at a steady rate which you can fine-tune and stop it for a duration, and each action consumes a token. If no tokens are available, the action can either fail or wait for tokens to refill.
