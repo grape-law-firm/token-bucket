@@ -1,6 +1,6 @@
 {
   "name": "@grapelaw/token-bucket",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "keywords": ["rate Limiting", "token bucket algorithm", "asynchronous token consumption"],
   "license": "MIT",
   "main": "lib/index.js",
